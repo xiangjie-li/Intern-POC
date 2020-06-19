@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd" xmlns:spring="http://www.springframework.org/schema/beans">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="914ad9d6-9e61-4c5a-98cb-a0593fb7d7ef" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="producerAPIFlow" doc:id="2ac44995-5065-4684-a176-e4e610d04215" >
+		<http:listener doc:name="Listener" doc:id="5b0f79ff-1a60-4c1a-bc9d-fbe350f4e595" config-ref="HTTP_Listener_config" path="/producer"/>
+		<java:new doc:name="New DynamicProducerFlowGenerator" doc:id="6c8cf087-0601-4b89-9d24-16650b9a6e6f" class="DynamicProducerFlowGenerator" constructor="DynamicProducerFlowGenerator()"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="f324c006-0abe-443c-864f-fe8ff417ed24" variableName="generator"/>
+		<java:invoke doc:name="Invoke" doc:id="d5258c18-74e8-4c86-a0ae-758ad41d1b32" instance="#[vars.generator]" class="DynamicProducerFlowGenerator" method="initialise()"/>
+	</flow>
+</mule>
